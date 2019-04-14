@@ -1,29 +1,45 @@
 # In many of the cases I assume that the input contains only a single portfolio as in the example file. A solution that
-# works with multiple portfolios in the input could be created with smaller effort from the current solution.
+# works with multiple portfolios in the input could be created with some effort from the current solution.
 
 
 def perform_tasks(instruments):
-    perform_task_1(instruments)
-    perform_task_2(instruments)
-    # perform_task_3(instruments)
+    portfolio_value_usd = perform_task_1(instruments)
+    perform_task_2(instruments, portfolio_value_usd)
+    perform_task_3(instruments)
     # perform_task_4(instruments)
 
 
 def perform_task_1(instruments):
-    perform_task_1_b(instruments)
+    return perform_task_1_b(instruments)
+
+
+def perform_task_2(instruments, portfolio_value_usd):
+    cash_value_usd = perform_task_2_a(instruments)
+    perform_task_2_b(instruments)
+    portfolio_cash_percentage = cash_value_usd / portfolio_value_usd * 100
+    perform_task_2_c(instruments, portfolio_cash_percentage)
 
 
 def perform_task_1_b(instruments):
     # 1 b) Calculate the total portfolio value in CHF.
-    sum = 0.0
+    sum_usd = 0.0
     for instrument in instruments:
-        fx_rate = get_fx_rate(instrument.QuotationCurrency_21, "CHF")
-        sum += fx_rate * instrument.PositionValueQc_22
-    print("Total portfolio value in CHF: %f" % sum)
+        fx_rate = get_fx_rate(instrument.QuotationCurrency_21, "USD")
+        sum_usd += fx_rate * instrument.PositionValueQc_22
+    sum_in_chf = convert_value_to_other_currency(sum_usd, "USD", "CHF")
+    print("Total value in portfolio %s CHF: %f" % (instruments[0].PortfolioID_1, sum_in_chf))
+    return sum_usd
 
 
-def perform_task_2(instruments):
-    perform_task_2_b(instruments)
+def perform_task_2_a(instruments):
+    # 2 a) What is the total value of the cash items in USD?
+    sum_usd = 0.0
+    for instrument in instruments:
+        if instrument.PositionInstrumentCIC_12 == "XT71":
+            position_value = instrument.PositionValueQc_22
+            sum_usd += convert_value_to_other_currency(position_value, instrument.QuotationCurrency_21, "USD")
+    print("Cash instrument value in portfolio %s is %f USD" % (instruments[0].PortfolioID_1, sum_usd))
+    return sum_usd
 
 
 def perform_task_2_b(instruments):
@@ -32,13 +48,21 @@ def perform_task_2_b(instruments):
     sum_of_chf = collect_values_of_same_currency(instruments, "CHF")
     sum_of_usd = collect_values_of_same_currency(instruments, "USD")
 
-    # To be able to compare, we convert both sums to portfolio currency
+    # To be able to compare, we convert both sums to the same currency
     currency_of_portfolio = instruments[0].PortfolioCurrency_4
     chf_in_portfolio_currency = convert_value_to_other_currency(sum_of_chf, "CHF", currency_of_portfolio)
     usd_in_portfolio_currency = convert_value_to_other_currency(sum_of_usd, "USD", currency_of_portfolio)
     chf_percentage = chf_in_portfolio_currency / (chf_in_portfolio_currency + usd_in_portfolio_currency) * 100
     usd_percentage = usd_in_portfolio_currency / (chf_in_portfolio_currency + usd_in_portfolio_currency) * 100
-    print("USD CHF percentage in portfolio %s is CHF: %f%% USD: %f%%" % (instruments[0].PortfolioID_1, chf_percentage, usd_percentage))
+    print("CHF-USD percentage for cash instruments in portfolio %s is CHF: %f%% USD: %f%%"
+          % (instruments[0].PortfolioID_1, chf_percentage, usd_percentage))
+
+
+def perform_task_2_c(instruments, portfolio_cash_percentage):
+    # 2 c) Please also fill the 9_Portfolio-CashPercentage column!
+    # Instrument object is filled with the required data which is later written to the excel file
+    for instrument in instruments:
+        instrument.PortfolioCashPercentage_9_output = portfolio_cash_percentage
 
 
 def collect_values_of_same_currency(instruments, currency):
