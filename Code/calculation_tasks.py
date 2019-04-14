@@ -1,3 +1,6 @@
+# In many of the cases I assume that the input contains only a single portfolio as in the example file. A solution that
+# works with multiple portfolios in the input could be created with smaller effort from the current solution.
+
 def perform_tasks(instruments):
     perform_task_1(instruments)
     #perform_task_2(instruments)
@@ -6,13 +9,17 @@ def perform_tasks(instruments):
 
 
 def perform_task_1(instruments):
+    perform_task_1_b(instruments)
 
-    #b) Calculate the total portfolio value in CHF. Try to be as consistent as possible.
+
+def perform_task_1_b(instruments):
+    # b) Calculate the total portfolio value in CHF.
     sum = 0.0
     for instrument in instruments:
         fx_rate = get_fx_rate(instrument.QuotationCurrency_21, "CHF")
         sum += fx_rate * instrument.PositionValueQc_22
-    print("Calculate the total portfolio value in CHF: %f" % sum)
+    print("Total portfolio value in CHF: %f" % sum)
+
 
 
 def perform_task_2(instruments):
