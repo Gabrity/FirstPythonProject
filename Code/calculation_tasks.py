@@ -5,19 +5,27 @@
 def perform_tasks(instruments):
     portfolio_value_usd = perform_task_1(instruments)
     perform_task_2(instruments, portfolio_value_usd)
-    perform_task_3(instruments)
+    # perform_task_3(instruments)
     # perform_task_4(instruments)
 
 
 def perform_task_1(instruments):
-    return perform_task_1_b(instruments)
+    portfolio_value_usd = perform_task_1_b(instruments)
+    perform_task_1_a(instruments, portfolio_value_usd)
+    return portfolio_value_usd
 
 
-def perform_task_2(instruments, portfolio_value_usd):
-    cash_value_usd = perform_task_2_a(instruments)
-    perform_task_2_b(instruments)
-    portfolio_cash_percentage = cash_value_usd / portfolio_value_usd * 100
-    perform_task_2_c(instruments, portfolio_cash_percentage)
+def perform_task_1_a(instruments, sum_usd):
+    # a) The following columns of the report were deleted:
+    # 5_Portfolio-TotalNetAssets
+    # 8b_Portfolio-ShareClass-TotalNumberOfShares
+    # Calculate the missing values.
+    number_of_shares = sum_usd / instruments[0].Portfolio_SharePrice
+    for instrument in instruments:
+        # even though we know that portfolio currency is USD, this would convert it if was different
+        instrument.Portfolio_TotalNetAssets_5_output = convert_value_to_other_currency(sum_usd, "USD",
+                                                                                       instrument.PortfolioCurrency_4)
+        instrument.Portfolio_TotalNumberOfShares_8b_output = number_of_shares
 
 
 def perform_task_1_b(instruments):
@@ -29,6 +37,13 @@ def perform_task_1_b(instruments):
     sum_in_chf = convert_value_to_other_currency(sum_usd, "USD", "CHF")
     print("Total value in portfolio %s CHF: %f" % (instruments[0].PortfolioID_1, sum_in_chf))
     return sum_usd
+
+
+def perform_task_2(instruments, portfolio_value_usd):
+    cash_value_usd = perform_task_2_a(instruments)
+    perform_task_2_b(instruments)
+    portfolio_cash_percentage = cash_value_usd / portfolio_value_usd * 100
+    perform_task_2_c(instruments, portfolio_cash_percentage)
 
 
 def perform_task_2_a(instruments):
