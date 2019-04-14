@@ -28,22 +28,23 @@ def perform_task_2(instruments):
 
 def perform_task_2_b(instruments):
     # 2 b) What is the currency distribution in the portfolio in percentage?
+    # Here we assume that the task is to calculate the currency distribution of CASH instruments
     sum_of_chf = collect_values_of_same_currency(instruments, "CHF")
     sum_of_usd = collect_values_of_same_currency(instruments, "USD")
 
-    # To be able to compare, we convert all sums to portfolio currency
+    # To be able to compare, we convert both sums to portfolio currency
     currency_of_portfolio = instruments[0].PortfolioCurrency_4
     chf_in_portfolio_currency = convert_value_to_other_currency(sum_of_chf, "CHF", currency_of_portfolio)
     usd_in_portfolio_currency = convert_value_to_other_currency(sum_of_usd, "USD", currency_of_portfolio)
     chf_percentage = chf_in_portfolio_currency / (chf_in_portfolio_currency + usd_in_portfolio_currency) * 100
     usd_percentage = usd_in_portfolio_currency / (chf_in_portfolio_currency + usd_in_portfolio_currency) * 100
-    print("USD CHF percentage in portfolio is CHF: %f%% USD: %f%%" % (chf_percentage, usd_percentage))
+    print("USD CHF percentage in portfolio %s is CHF: %f%% USD: %f%%" % (instruments[0].PortfolioID_1, chf_percentage, usd_percentage))
 
 
 def collect_values_of_same_currency(instruments, currency):
     result = 0.0
     for instrument in instruments:
-        if instrument.QuotationCurrency_21 == currency:
+        if (instrument.QuotationCurrency_21 == currency) & (instrument.PositionInstrumentCIC_12 == "XT71"):
             result += instrument.PositionValueQc_22
     return result
 
