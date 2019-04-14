@@ -19,7 +19,6 @@ class Instrument:
 
 
 def read_excel_input():
-    # todo make this relative path
     file = "..\\resources\SampleTPTReport.xlsx"
 
     sheet = get_sheet(file)

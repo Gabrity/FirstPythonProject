@@ -21,7 +21,6 @@ def perform_task_1_b(instruments):
     print("Total portfolio value in CHF: %f" % sum)
 
 
-
 def perform_task_2(instruments):
     pass
 
