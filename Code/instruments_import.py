@@ -20,7 +20,7 @@ class Instrument:
 
 def read_excel_input():
     # todo make this relative path
-    file = "C:\Work\Other_Projects\FirstPythonProject\\resources\SampleTPTReport.xlsx"
+    file = "..\\resources\SampleTPTReport.xlsx"
 
     sheet = get_sheet(file)
 
@@ -29,7 +29,6 @@ def read_excel_input():
         line = get_line(row, sheet)
         instrument = Instrument(row, line)
         instruments.append(instrument)
-    print(instruments)
     return instruments
 
 
