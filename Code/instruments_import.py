@@ -9,13 +9,13 @@ class Instrument:
     QuotationCurrency_21 = ""
     PositionValueQc_22 = 0.0
 
-    def __init__(self, id_number, instrument_string):
-        IdNumber = id_number
-        InstrumentName_14 = instrument_string[14]
-        PositionInstrumentCIC_12 = instrument_string[12]
-        PortfolioCurrency_4 = instrument_string[3]
-        QuotationCurrency_21 = instrument_string[22]
-        PositionValueQc_22 = instrument_string[23]
+    def __init__(self, id_number, instrument_line):
+        self.IdNumber = id_number
+        self.InstrumentName_14 = instrument_line[14].value
+        self.PositionInstrumentCIC_12 = instrument_line[12].value
+        self.PortfolioCurrency_4 = instrument_line[3].value
+        self.QuotationCurrency_21 = instrument_line[22].value
+        self.PositionValueQc_22 = instrument_line[23].value
 
 
 def read_excel_input():
@@ -35,8 +35,8 @@ def read_excel_input():
 
 def get_sheet(file):
     wb = open_workbook(file)
-    if wb.nsheets > 1:
-        raise ValueError('We expect a single sheet only')
+    if wb.nsheets != 1:
+        raise ValueError('We expect a single sheet')
     sheet = wb.sheets()[0]
     return sheet
 
