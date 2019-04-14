@@ -4,7 +4,7 @@ from xlrd import open_workbook
 class Instrument:
     IdNumber = 0
     PortfolioID_1 = ""
-    Portfolio_SharePrice = 0.0
+    Portfolio_SharePrice_8 = 0.0
     InstrumentName_14 = ""
     PositionInstrumentCIC_12 = ""
     PortfolioCurrency_4 = ""
@@ -18,7 +18,7 @@ class Instrument:
     def __init__(self, id_number, instrument_line):
         self.IdNumber = id_number
         self.PortfolioID_1 = instrument_line[0].value
-        self.Portfolio_SharePrice = instrument_line[7].value
+        self.Portfolio_SharePrice_8 = instrument_line[7].value
         self.InstrumentName_14 = instrument_line[14].value
         self.PositionInstrumentCIC_12 = instrument_line[12].value
         self.PortfolioCurrency_4 = instrument_line[3].value

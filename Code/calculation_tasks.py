@@ -20,7 +20,7 @@ def perform_task_1_a(instruments, sum_usd):
     # 5_Portfolio-TotalNetAssets
     # 8b_Portfolio-ShareClass-TotalNumberOfShares
     # Calculate the missing values.
-    number_of_shares = sum_usd / instruments[0].Portfolio_SharePrice
+    number_of_shares = sum_usd / instruments[0].Portfolio_SharePrice_8
     for instrument in instruments:
         # even though we know that portfolio currency is USD, this would convert it if was different
         instrument.Portfolio_TotalNetAssets_5_output = convert_value_to_other_currency(sum_usd, "USD",
@@ -60,8 +60,8 @@ def perform_task_2_a(instruments):
 def perform_task_2_b(instruments):
     # 2 b) What is the currency distribution in the portfolio in percentage?
     # Here we assume that the task is to calculate the currency distribution of CASH instruments
-    sum_of_chf = collect_values_of_same_currency(instruments, "CHF")
-    sum_of_usd = collect_values_of_same_currency(instruments, "USD")
+    sum_of_chf = collect_cash_values_of_same_currency(instruments, "CHF")
+    sum_of_usd = collect_cash_values_of_same_currency(instruments, "USD")
 
     # To be able to compare, we convert both sums to the same currency
     currency_of_portfolio = instruments[0].PortfolioCurrency_4
@@ -80,20 +80,20 @@ def perform_task_2_c(instruments, portfolio_cash_percentage):
         instrument.PortfolioCashPercentage_9_output = portfolio_cash_percentage
 
 
-def collect_values_of_same_currency(instruments, currency):
-    result = 0.0
-    for instrument in instruments:
-        if (instrument.QuotationCurrency_21 == currency) & (instrument.PositionInstrumentCIC_12 == "XT71"):
-            result += instrument.PositionValueQc_22
-    return result
-
-
 def perform_task_3(instruments):
     pass
 
 
 def perform_task_4(instruments):
     pass
+
+
+def collect_cash_values_of_same_currency(instruments, currency):
+    result = 0.0
+    for instrument in instruments:
+        if (instrument.QuotationCurrency_21 == currency) & (instrument.PositionInstrumentCIC_12 == "XT71"):
+            result += instrument.PositionValueQc_22
+    return result
 
 
 def convert_value_to_other_currency(original_amount, original_currency, target_currency):
@@ -108,6 +108,7 @@ def get_fx_rate(from_currency, to_currency):
     if (from_currency == "CHF") & (to_currency == "CHF"):
         return 1.0
     if (from_currency == "CHF") & (to_currency == "USD"):
+        # Using some recent spot rates
         return 0.99726
     if (from_currency == "USD") & (to_currency == "CHF"):
         return 1.00238
